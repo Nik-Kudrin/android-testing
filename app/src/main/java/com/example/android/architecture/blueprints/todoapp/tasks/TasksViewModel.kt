@@ -41,8 +41,8 @@ class TasksViewModel(private val tasksRepository: ITasksRepository) : ViewModel(
                 _dataLoading.value = false
             }
         }
-        tasksRepository.observeTasks().switchMap { filterTasks(it) }
 
+        tasksRepository.observeTasks().switchMap { filterTasks(it) }
     }
 
     val items: LiveData<List<Task>> = _items
