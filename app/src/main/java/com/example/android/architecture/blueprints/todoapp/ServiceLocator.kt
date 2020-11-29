@@ -1,6 +1,7 @@
 package com.example.android.architecture.blueprints.todoapp
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import androidx.room.Room
 import com.example.android.architecture.blueprints.todoapp.data.source.DefaultTasksRepository
 import com.example.android.architecture.blueprints.todoapp.data.source.ITasksRepository
@@ -15,6 +16,7 @@ object ServiceLocator {
 
     @Volatile
     var tasksRepository: ITasksRepository? = null
+        @VisibleForTesting set
 
     fun provideTasksRepository(context: Context): ITasksRepository {
         synchronized(this) {
