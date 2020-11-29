@@ -21,6 +21,9 @@ class TaskDetailFragmentTest {
         val bundle = TaskDetailFragmentArgs(activeTask.id).toBundle()
         val scenario = launchFragmentInContainer<TaskDetailFragment>(bundle, R.style.AppTheme)
 
+        scenario.onFragment {
+            it
+        }
 
     }
 }
