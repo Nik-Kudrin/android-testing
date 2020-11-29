@@ -9,14 +9,36 @@ import com.example.android.architecture.blueprints.todoapp.data.source.TasksData
 import com.example.android.architecture.blueprints.todoapp.data.source.local.TasksLocalDataSource
 import com.example.android.architecture.blueprints.todoapp.data.source.local.ToDoDatabase
 import com.example.android.architecture.blueprints.todoapp.data.source.remote.TasksRemoteDataSource
+import kotlinx.coroutines.runBlocking
 
+/**
+ * TODO: for parallelization should consider using a DI framework
+ */
 object ServiceLocator {
+    private val lock = Any()
 
     private var database: ToDoDatabase? = null
 
     @Volatile
     var tasksRepository: ITasksRepository? = null
         @VisibleForTesting set
+
+    @VisibleForTesting
+    fun resetRepository() {
+        synchronized(lock) {
+            runBlocking {
+                TasksRemoteDataSource.deleteAllTasks()
+            }
+            // Clear all data to avoid test pollution.
+            database?.apply {
+                clearAllTables()
+                close()
+            }
+
+            database = null
+            tasksRepository = null
+        }
+    }
 
     fun provideTasksRepository(context: Context): ITasksRepository {
         synchronized(this) {
