@@ -21,9 +21,9 @@ object ServiceLocator {
 
     @Volatile
     var tasksRepository: ITasksRepository? = null
-        @VisibleForTesting set
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) set
 
-    @VisibleForTesting
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun resetRepository() {
         synchronized(lock) {
             runBlocking {
