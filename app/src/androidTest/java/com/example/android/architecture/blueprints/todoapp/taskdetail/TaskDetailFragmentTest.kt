@@ -35,25 +35,48 @@ class TaskDetailFragmentTest {
         ServiceLocator.resetRepository()
     }
 
-    @Test
-    fun activeTaskDetails_DisplayedInUi() = runBlockingTest {
-        // Add active (incomplete) task to the DB
-        val activeTask = Task(title = "Active Task", description = "Task description", isCompleted = false)
-        repository.saveTask(activeTask)
-
+    private fun launchTaskDetailFragment(activeTask: Task) {
         // Details fragment launched to display task
         val bundle = TaskDetailFragmentArgs(activeTask.id).toBundle()
         val scenario = launchFragmentInContainer<TaskDetailFragment>(bundle, R.style.AppTheme)
+    }
 
+    private fun checkTitleAndDescription(activeTask: Task) {
         // Make sure that the title/description are both shown and correct
         onView(withId(R.id.task_detail_title_text)).check(matches(isDisplayed()))
         onView(withId(R.id.task_detail_title_text)).check(matches(withText(activeTask.title)))
 
         onView(withId(R.id.task_detail_description_text)).check(matches(isDisplayed()))
         onView(withId(R.id.task_detail_description_text)).check(matches(withText(activeTask.description)))
+    }
+
+    @Test
+    fun activeTaskDetails_DisplayedInUi() = runBlockingTest {
+        // Add active (incomplete) task to the DB
+        val activeTask = Task(title = "Active Task", description = "Task description", isCompleted = false)
+        repository.saveTask(activeTask)
+
+        launchTaskDetailFragment(activeTask)
+
+        checkTitleAndDescription(activeTask)
 
         // and make sure the "active" checkbox is shown unchecked
         onView(withId(R.id.task_detail_complete_checkbox)).check(matches(isDisplayed()))
         onView(withId(R.id.task_detail_complete_checkbox)).check(matches(not(isChecked())))
+    }
+
+    @Test
+    fun completedTaskDetails_DisplayedInUi() = runBlockingTest {
+        // Add active (incomplete) task to the DB
+        val activeTask = Task(title = "Completed Task", description = "Completed task description", isCompleted = true)
+        repository.saveTask(activeTask)
+
+        launchTaskDetailFragment(activeTask)
+
+        checkTitleAndDescription(activeTask)
+
+        // and make sure the "active" checkbox is shown unchecked
+        onView(withId(R.id.task_detail_complete_checkbox)).check(matches(isDisplayed()))
+        onView(withId(R.id.task_detail_complete_checkbox)).check(matches(isChecked()))
     }
 }
