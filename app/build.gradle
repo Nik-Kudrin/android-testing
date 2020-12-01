@@ -90,4 +90,8 @@ dependencies {
 
     implementation "androidx.fragment:fragment-testing:$fragmentVersion"
     implementation "androidx.test:core:$androidXTestCoreVersion"
+
+    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
 }
